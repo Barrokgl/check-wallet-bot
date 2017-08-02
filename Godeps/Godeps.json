@@ -1,0 +1,17 @@
+{
+	"ImportPath": "github.com/Barrokgl/check-wallet-bot",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v79",
+	"Deps": [
+		{
+			"ImportPath": "github.com/go-telegram-bot-api/telegram-bot-api",
+			"Comment": "v4.6-50-g13c54dc",
+			"Rev": "13c54dc548f7ca692fe434d4b7cac072b0de0e0b"
+		},
+		{
+			"ImportPath": "github.com/technoweenie/multipartstreamer",
+			"Comment": "v1.0.1",
+			"Rev": "a90a01d73ae432e2611d178c18367fbaa13e0154"
+		}
+	]
+}
