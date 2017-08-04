@@ -11,10 +11,12 @@ func main() {
 	}
 	log.Println("Get config token: ", config.Token, " and webhook url: ", config.Url)
 
-	updates, err := InitBot(config)
+	bot, err := InitBot(config.Token)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	ProcessUpdates(updates)
+    updates, err := InitWebHook(bot, config)
+
+	ProcessUpdates(updates, bot)
 }

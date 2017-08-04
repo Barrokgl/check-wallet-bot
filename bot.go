@@ -7,19 +7,23 @@ import (
 	"net/url"
 )
 
-func InitBot(config Config) (tgbotapi.UpdatesChannel, error) {
-	bot, err := tgbotapi.NewBotAPI(config.Token)
+func InitBot(token string) (*tgbotapi.BotAPI, error) {
+	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		return nil, err
 	}
 
 	bot.Debug = true
+	log.Println("Account: ", bot.Self.UserName)
+
+	return bot, nil
+}
+
+func InitWebHook(bot *tgbotapi.BotAPI, config Config) (tgbotapi.UpdatesChannel, error) {
 	URL, err := url.Parse(config.Url)
 	if err != nil {
 		return nil, err
 	}
-
-	log.Println("Account: ", bot.Self.UserName)
 
 	bot.SetWebhook(tgbotapi.WebhookConfig{URL: URL})
 
