@@ -44,6 +44,6 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 			continue
 		}
 
-		log.Println(update.Message.Chat.ID, update.Message.Text)
+		log.Println(update.Message.Chat.ID, update.Message.Text, "olol")
 	}
 }
