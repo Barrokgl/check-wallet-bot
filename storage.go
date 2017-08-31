@@ -1,8 +1,14 @@
 package main
 
 import (
-	"github.com/lib/pg"
+	_ "github.com/lib/pq"
     "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-func GetChats() (*tgbotapi.Chat)
+type Chattable interface {
+    SendMessage()    
+}
+
+func GetChats() (*tgbotapi.Chat) {
+    return nil
+}
