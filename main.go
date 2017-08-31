@@ -3,19 +3,13 @@ package main
 import "log"
 
 func main() {
-	log.Println("Starting bot")
-
-	config, err := GetConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Get config token: ", config.Token, " and webhook url: ", config.Url)
+	config := GetConfig()
 
 	bot, err := InitBot(config.Token)
 	if err != nil {
 		log.Fatal(err)
 	}
-
+    log.Println("Bot started on port: ", config.Port)
     updates, err := InitWebHook(bot, config)
 
 	ProcessUpdates(updates, bot)

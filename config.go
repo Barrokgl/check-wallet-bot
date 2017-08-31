@@ -1,8 +1,9 @@
 package main
 
 import (
-	"io/ioutil"
-	"encoding/json"
+    "os"
+    "errors"
+    "log"
 )
 
 type Config struct {
@@ -11,18 +12,24 @@ type Config struct {
 	Port string `json:"port"`
 }
 
-func GetConfig() (Config, error){
-	data, err := ioutil.ReadFile("./config/bot.json")
-	if err != nil {
-		return Config{}, err
-	}
+func GetConfig() Config {
+    token := os.Getenv("TOKEN")
+    checkEnvVar(token)
 
-	var config Config
-	err = json.Unmarshal(data, &config)
-	if err != nil {
-		return Config{}, err
-	}
+    url := os.Getenv("URL")
+    checkEnvVar(url)
 
-	return config, nil
+    port := os.Getenv("PORT")
+    checkEnvVar(port)
+
+	return Config{token, url, port}
 }
 
+func checkEnvVar(variable string) {
+    if variable == "" {
+        log.Fatal(errors.New("To start bot required 3 env vars: TOKEN, PORT, URL"))
+        return
+    }
+
+    return 
+}
