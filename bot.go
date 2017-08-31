@@ -7,8 +7,8 @@ import (
 	"net/url"
 )
 
-func InitBot(token string) (tgbotapi.UpdatesChannel, error) {
-	bot, err := tgbotapi.NewBotAPI(config.Token)
+func InitBot(token string) (*tgbotapi.BotAPI, error) {
+	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		return nil, err
 	}
