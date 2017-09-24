@@ -44,6 +44,10 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 			continue
 		}
 
-		log.Println(update.Message.Chat.ID, update.Message.Text, "olol")
+		log.Println(update.Message.Chat.ID, update.Message.From.ID ,update.Message.Text)
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "yay some text: " + update.Message.Text)
+		msg.ReplyToMessageID = update.Message.MessageID
+
+		bot.Send(msg)
 	}
 }
