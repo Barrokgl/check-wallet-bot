@@ -5,11 +5,6 @@ import "log"
 func main() {
 	config := GetConfig()
 
-	err := initDatabse()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	bot, err := InitBot(config.Token)
 	if err != nil {
 		log.Fatal(err)
