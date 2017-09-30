@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 func InitBot(token string) (*tgbotapi.BotAPI, error) {
@@ -45,7 +46,20 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		}
 
 		log.Println(update.Message.Chat.ID, update.Message.From.ID ,update.Message.Text)
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "yay some text: " + update.Message.Text)
+		text := update.Message.Text
+		var response string
+
+		switch true {
+		case strings.Contains(text, "/add"):
+			response = "adding money"
+		case strings.Contains(text, "/rem"):
+			response = "removing money"
+		case strings.Contains(text, "/status"):
+			response = "getting status"
+		default:
+			response = "i don't get what you want from me."
+		}
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, response)
 		msg.ReplyToMessageID = update.Message.MessageID
 
 		bot.Send(msg)
