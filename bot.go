@@ -5,8 +5,11 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
+
+var store = make(map[string]map[string]float64)
 
 func InitBot(token string) (*tgbotapi.BotAPI, error) {
 	bot, err := tgbotapi.NewBotAPI(token)
@@ -14,7 +17,7 @@ func InitBot(token string) (*tgbotapi.BotAPI, error) {
 		return nil, err
 	}
 
-	bot.Debug = true
+	//bot.Debug = true
 	log.Println("Account: ", bot.Self.UserName)
 
 	return bot, nil
@@ -45,13 +48,19 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 			continue
 		}
 
-		log.Println(update.Message.Chat.ID, update.Message.From.ID ,update.Message.Text)
+		log.Println(update.Message.Chat.ID, update.Message.From.ID, update.Message.Text)
 		text := update.Message.Text
 		var response string
 
+		account := strconv.FormatInt(int64(update.Message.From.ID), 10)
+		money, err := strconv.ParseFloat(strings.Split(text, " ")[0], 64)
+		if err != nil {
+			log.Println("[ERROR]: ", err)
+		}
+
 		switch true {
 		case strings.Contains(text, "/add"):
-			response = "adding money"
+			response = addMoney(money, account, "default")
 		case strings.Contains(text, "/rem"):
 			response = "removing money"
 		case strings.Contains(text, "/status"):
@@ -64,4 +73,15 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 
 		bot.Send(msg)
 	}
+}
+
+func addMoney(money float64, account, category string) string {
+	val, ok := store[account]
+	if !ok {
+		log.Println("store value: ", val)
+		store[account] = make(map[string]float64)
+		log.Println("store value: ", val)
+	}
+	log.Println("category", category)
+	return "add: " + strconv.FormatFloat(money, 'f', -1, 64)
 }
