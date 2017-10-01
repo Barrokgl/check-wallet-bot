@@ -53,15 +53,17 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		var response string
 
 		account := strconv.FormatInt(int64(update.Message.From.ID), 10)
-		money, err := strconv.ParseFloat(strings.Split(text, " ")[0], 64)
+		money, err := strconv.ParseFloat(strings.Split(text, " ")[1], 64)
 		if err != nil {
 			log.Println("[ERROR]: ", err)
 		}
 
 		switch true {
-		case strings.Contains(text, "/add"):
-			response = addMoney(money, account, "default")
-		case strings.Contains(text, "/rem"):
+		case strings.Contains(text, "/start"):
+			response = startMessage()
+		case strings.HasPrefix(text, "+"):
+			response = addMoney(money, account, strings.Split(text, " ")[2])
+		case strings.HasPrefix(text, "-"):
 			response = "removing money"
 		case strings.Contains(text, "/status"):
 			response = "getting status"
@@ -73,6 +75,12 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 
 		bot.Send(msg)
 	}
+}
+
+func startMessage() string {
+	return `This is check wallet bot, usage:
+			+ <money> <category(optional)> - add money to wallet
+			- <money> <category(optional)> - remove money from wallet`
 }
 
 func addMoney(money float64, account, category string) string {
