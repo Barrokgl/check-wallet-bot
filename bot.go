@@ -50,15 +50,15 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 
 		log.Println(update.Message.Chat.ID, update.Message.From.ID, update.Message.Text)
 		text := update.Message.Text
-		parsedText := strings.Split(text, "")
-		log.Println(parsedText, parsedText)
+		parsedText := strings.Fields(text)
+		log.Println(parsedText)
 		var response string
 		var money float64
 		var err error
 
 		account := strconv.FormatInt(int64(update.Message.From.ID), 10)
 		if len(parsedText) > 3 {
-			money, err = strconv.ParseFloat(strings.Split(text, " ")[1], 64)
+			money, err = strconv.ParseFloat(parsedText[1], 64)
 			if err != nil {
 				log.Println("[ERROR]: ", err)
 			}
@@ -71,7 +71,7 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		case strings.Contains(text, "/start"):
 			response = startMessage()
 		case strings.HasPrefix(text, "+"):
-			response = addMoney(money, account, strings.Split(text, " ")[2])
+			response = addMoney(money, account, parsedText[2])
 		case strings.HasPrefix(text, "-"):
 			response = "removing money"
 		case strings.Contains(text, "/status"):
