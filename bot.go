@@ -48,13 +48,12 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 			continue
 		}
 
-		log.Println(update.Message.Chat.ID, update.Message.From.ID, update.Message.Text)
 		text := update.Message.Text
 		parsedText := strings.Fields(text)
-		log.Println(parsedText)
 		var response string
 		var money float64
 		var err error
+		var category string
 
 		account := strconv.FormatInt(int64(update.Message.From.ID), 10)
 		if len(parsedText) > 3 {
@@ -62,8 +61,11 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 			if err != nil {
 				log.Println("[ERROR]: ", err)
 			}
+
+			category = parsedText[2]
 		} else {
 			money = 0
+			category = "default"
 		}
 
 
@@ -71,7 +73,7 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		case strings.Contains(text, "/start"):
 			response = startMessage()
 		case strings.HasPrefix(text, "+"):
-			response = addMoney(money, account, parsedText[2])
+			response = addMoney(money, account, category)
 		case strings.HasPrefix(text, "-"):
 			response = "removing money"
 		case strings.Contains(text, "/status"):
@@ -88,8 +90,8 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 
 func startMessage() string {
 	return `This is check wallet bot, usage:
-			+ <money> <category(optional)> - add money to wallet
-			- <money> <category(optional)> - remove money from wallet`
+		   + <money> <category(optional)> - add money to wallet
+		   - <money> <category(optional)> - remove money from wallet`
 }
 
 func addMoney(money float64, account, category string) string {
