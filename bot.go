@@ -51,7 +51,7 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		log.Println(update.Message.Chat.ID, update.Message.From.ID, update.Message.Text)
 		text := update.Message.Text
 		parsedText := strings.Split(text, "")
-
+		log.Println(parsedText, parsedText)
 		var response string
 		var money float64
 		var err error
