@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"fmt"
 )
 
 var store = make(map[string]map[string]float64)
@@ -102,7 +103,11 @@ func addMoney(money float64, account, category string) string {
 
 	store[account][category] += money
 
-	return "add: " + strconv.FormatFloat(money, 'f', -1, 64)
+	return fmt.Sprintf(
+		`add: %d
+			category: %v`,
+		strconv.FormatFloat(money, 'f', -1, 64),
+		category)
 }
 
 func removeMoney(money float64, account, category string) string {
@@ -113,7 +118,11 @@ func removeMoney(money float64, account, category string) string {
 
 	store[account][category] -= money
 
-	return "remove: " + strconv.FormatFloat(money, 'f', -1, 64)
+	return fmt.Sprintf(
+		`remove: %d
+			category: %v`,
+		strconv.FormatFloat(money, 'f', -1, 64),
+		category)
 }
 
 func getStatus(account string) string {
