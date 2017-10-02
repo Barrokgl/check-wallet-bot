@@ -17,7 +17,6 @@ func InitBot(token string) (*tgbotapi.BotAPI, error) {
 		return nil, err
 	}
 
-	//bot.Debug = true
 	log.Println("Account: ", bot.Self.UserName)
 
 	return bot, nil
@@ -69,18 +68,19 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		}
 
 
-		switch true {
+		switch {
 		case strings.Contains(text, "/start"):
 			response = startMessage()
 		case strings.HasPrefix(text, "+"):
 			response = addMoney(money, account, category)
 		case strings.HasPrefix(text, "-"):
-			response = "removing money"
+			response = removeMoney(money, account, category)
 		case strings.Contains(text, "/status"):
-			response = "getting status"
+			response = getStatus(account)
 		default:
 			response = "i don't get what you want from me."
 		}
+
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, response)
 		msg.ReplyToMessageID = update.Message.MessageID
 
@@ -95,12 +95,36 @@ func startMessage() string {
 }
 
 func addMoney(money float64, account, category string) string {
-	val, ok := store[account]
+	_, ok := store[account]
 	if !ok {
-		log.Println("store value: ", val)
 		store[account] = make(map[string]float64)
-		log.Println("store value: ", val)
 	}
-	log.Println("category", category)
+
+	store[account][category] += money
+
 	return "add: " + strconv.FormatFloat(money, 'f', -1, 64)
+}
+
+func removeMoney(money float64, account, category string) string {
+	_, ok := store[account]
+	if !ok {
+		store[account] = make(map[string]float64)
+	}
+
+	store[account][category] -= money
+
+	return "remove: " + strconv.FormatFloat(money, 'f', -1, 64)
+}
+
+func getStatus(account string) string {
+	_, ok := store[account]
+	if !ok {
+		store[account] = make(map[string]float64)
+	}
+	var sum float64
+	for _, val := range store[account] {
+		sum += val
+	}
+
+	return "wallet: " + strconv.FormatFloat(sum, 'f', -1, 64)
 }
