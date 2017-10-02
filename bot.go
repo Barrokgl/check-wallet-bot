@@ -56,15 +56,18 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		var category string
 
 		account := strconv.FormatInt(int64(update.Message.From.ID), 10)
-		if len(parsedText) > 3 {
+		if len(parsedText) > 2 {
 			money, err = strconv.ParseFloat(parsedText[1], 64)
 			if err != nil {
 				log.Println("[ERROR]: ", err)
 			}
-
-			category = parsedText[2]
 		} else {
 			money = 0
+		}
+
+		if len(parsedText) > 3 {
+			category = parsedText[2]
+		} else {
 			category = "default"
 		}
 
