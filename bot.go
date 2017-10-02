@@ -74,7 +74,7 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		log.Println(account, money, category)
 
 		switch {
-		case strings.Contains(text, "/start"):
+		case strings.Contains(text, "/start") || strings.Contains(text, "/help"):
 			response = startMessage()
 		case strings.HasPrefix(text, "+"):
 			response = addMoney(money, account, category)
@@ -96,7 +96,9 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 func startMessage() string {
 	return `This is check wallet bot, usage:
 		   + <money> <category(optional)> - add money to wallet
-		   - <money> <category(optional)> - remove money from wallet`
+		   - <money> <category(optional)> - remove money from wallet
+		   /status - to get your wallet status
+		   /help - prints this message`
 }
 
 func addMoney(money float64, account, category string) string {
