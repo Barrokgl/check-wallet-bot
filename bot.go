@@ -56,7 +56,7 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		var category string
 
 		account := strconv.FormatInt(int64(update.Message.From.ID), 10)
-		log.Println(parsedText, len(parsedText))
+		log.Println(parsedText)
 		if len(parsedText) >= 2 {
 			money, err = strconv.ParseFloat(parsedText[1], 64)
 			if err != nil {
@@ -71,7 +71,6 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		} else {
 			category = "default"
 		}
-		log.Println(account, money, category)
 
 		switch {
 		case strings.Contains(text, "/start") || strings.Contains(text, "/help"):
@@ -95,10 +94,10 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 
 func startMessage() string {
 	return `This is check wallet bot, usage:
-		   + <money> <category(optional)> - add money to wallet
-		   - <money> <category(optional)> - remove money from wallet
-		   /status - to get your wallet status
-		   /help - prints this message`
+	       + <money> <category(optional)> - add money to wallet
+	       - <money> <category(optional)> - remove money from wallet
+	       /status - to get your wallet status
+	       /help - prints this message`
 }
 
 func addMoney(money float64, account, category string) string {
@@ -108,12 +107,13 @@ func addMoney(money float64, account, category string) string {
 	}
 
 	store[account][category] += money
-	log.Println(store[account][category])
+
 	return fmt.Sprintf(
 		`add: %v
-			category: %v`,
+			%v: %v`,
 		strconv.FormatFloat(money, 'f', -1, 64),
-		category)
+		category,
+		store[account][category])
 }
 
 func removeMoney(money float64, account, category string) string {
@@ -126,9 +126,10 @@ func removeMoney(money float64, account, category string) string {
 	log.Println(store[account][category])
 	return fmt.Sprintf(
 		`remove: %v
-			category: %v`,
+			%v: %v`,
 		strconv.FormatFloat(money, 'f', -1, 64),
-		category)
+		category,
+		store[account][category])
 }
 
 func getStatus(account string) string {
