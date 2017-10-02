@@ -110,7 +110,7 @@ func addMoney(money float64, account, category string) string {
 
 	return fmt.Sprintf(
 		`add: %v
-			%v: %v`,
+		       %v: %v`,
 		strconv.FormatFloat(money, 'f', -1, 64),
 		category,
 		store[account][category])
@@ -126,7 +126,7 @@ func removeMoney(money float64, account, category string) string {
 	log.Println(store[account][category])
 	return fmt.Sprintf(
 		`remove: %v
-			%v: %v`,
+		       %v: %v`,
 		strconv.FormatFloat(money, 'f', -1, 64),
 		category,
 		store[account][category])
