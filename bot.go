@@ -70,7 +70,7 @@ func ProcessUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		} else {
 			category = "default"
 		}
-
+		log.Println(account, money, category)
 
 		switch {
 		case strings.Contains(text, "/start"):
@@ -105,9 +105,9 @@ func addMoney(money float64, account, category string) string {
 	}
 
 	store[account][category] += money
-
+	log.Println(store[account][category])
 	return fmt.Sprintf(
-		`add: %d
+		`add: %v
 			category: %v`,
 		strconv.FormatFloat(money, 'f', -1, 64),
 		category)
@@ -120,9 +120,9 @@ func removeMoney(money float64, account, category string) string {
 	}
 
 	store[account][category] -= money
-
+	log.Println(store[account][category])
 	return fmt.Sprintf(
-		`remove: %d
+		`remove: %v
 			category: %v`,
 		strconv.FormatFloat(money, 'f', -1, 64),
 		category)
